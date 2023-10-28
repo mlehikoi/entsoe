@@ -11,6 +11,8 @@ import (
 
 const endpoint = "https://web-api.tp.entsoe.eu/api"
 const apiDateFormat = "200601020000"
+const vat = 1.24
+const eurPerMWhToCentPerKWh = 0.1
 
 type PricePoint struct {
 	Time  time.Time
@@ -30,7 +32,6 @@ func GetPrices(token string, periodStart, periodEnd time.Time) ([]PricePoint, er
 
 	response, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Error making request:", err)
 		return nil, err
 	}
 
@@ -38,7 +39,6 @@ func GetPrices(token string, periodStart, periodEnd time.Time) ([]PricePoint, er
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("Error reading response body:", err)
 		return nil, err
 	}
 
@@ -48,7 +48,6 @@ func GetPrices(token string, periodStart, periodEnd time.Time) ([]PricePoint, er
 	var doc publicationMarketDocument
 	err = xml.Unmarshal([]byte(body), &doc)
 	if err != nil {
-		fmt.Printf("Error unmarshaling XML: %v", err)
 		return nil, err
 	}
 
@@ -56,18 +55,16 @@ func GetPrices(token string, periodStart, periodEnd time.Time) ([]PricePoint, er
 	for _, ts := range doc.TimeSeries {
 		t, err := time.Parse("2006-01-02T15:04Z", ts.Period.TimeInterval.Start)
 		if err != nil {
-			fmt.Println("Error:", err)
 			return nil, err
 		}
 
 		for _, point := range ts.Period.Points {
 			price, err := strconv.ParseFloat(point.Amount, 64)
 			if err != nil {
-				fmt.Printf("Error converting string to float: %v", err)
 				return nil, err
 			}
-			price /= 10.0
-			price *= 1.24
+			price *= eurPerMWhToCentPerKWh
+			price *= vat
 			prices = append(prices, PricePoint{t, price})
 			t = t.Add(time.Hour)
 		}
