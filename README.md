@@ -1,7 +1,7 @@
 # entsoe
 
-entsoe is a Go API for retrivieving day-ahead prices from ENTSO-E (European association for the cooperation of transmission system operators (TSOs) for electricity).
-It provides the prices for the Finnish market.
+entsoe is a Go API designed for retrieving day-ahead electricity prices from ENTSO-E (European association for the cooperation of transmission system operators for electricity).
+This API specifically provides prices for the Finnish market.
 
 ## Usage example
 
@@ -43,11 +43,13 @@ It provides the prices for the Finnish market.
 
 ## Notes
 
-The prices are in cents per kWh and include the Finnish VAT.
+The prices are provided in cents per kilowatt-hour (kWh) and include Finnish Value Added Tax (VAT).
 
-## Getting the token
+## Obtaining the token
 
-In order to use the API, you need a token.
-Register to entsoe: https://transparency.entsoe.eu/
-After having registered, send an email to get access to the RESTful API.
-For more information, see: https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html#_authentication_and_authorisation
+To use the API, you need an authentication token.
+Here are the steps to obtain it:
+
+1. **Register on ENTSO-E:** Go to https://transparency.entsoe.eu/ and complete the registration process.
+2. **Request API Access:** After registering, send an email to request access to the RESTful API.
+3. **For More Information:** Detailed information about authentication and authorization can be found at https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api/Guide.html#_authentication_and_authorisation.
